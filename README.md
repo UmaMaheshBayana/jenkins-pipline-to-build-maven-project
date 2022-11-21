@@ -25,9 +25,9 @@ pipeline {
 				}
 			}
 			}
-			stage {
+			stage ('PUSH ARTIFACTS'){
 				steps {
-					sh 'sudo cp /var/lib/jenkins/workspace/testproject2/target/*.war /opt/sanela/server/tomcat/webapps/'
+					sh 'sudo cp /var/lib/jenkins/workspace/testproject2/target/*.war  /opt/sanela/server/tomcat/webapps/'
 				}
 			}
 		
@@ -38,6 +38,7 @@ pipeline {
 		}
 	
 	}
+
 
 }
 
