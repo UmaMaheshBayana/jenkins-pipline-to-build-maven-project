@@ -5,16 +5,19 @@
 pipeline {
 	agent any
 	tools {
-		maven "MAVEN3"
+		//installing the requried tools before building//
+		maven "MAVEN3"               
 		jdk "OracleJDK8"
 	}
 	stages {
-		stage('fetch code') {
+	    //fecthing the code fro gitlab with authecating with git credentials//
+		stage('FETCHING CODE') {
 			steps {
-				git branch: 'main', url: 'https://github.com/UmaMaheshBayana/testproject2.git'
+				git branch: 'feature-dna', credentialsId: '4ad397ea-a199-4701-a46b-ff30d1526735', url: 'http://gitlab.sanelahealth.com/services/labinventory.git'
 			}
 		}
-		stage('Build'){
+		//building the code using maven install and archevinf the files//
+		stage('BUILDING'){
 			steps {
 				sh 'mvn clean install -DskipTest'
 			}
@@ -25,12 +28,13 @@ pipeline {
 				}
 			}
 			}
-			stage ('PUSH ARTIFACTS'){
-				steps {
-					sh 'sudo cp /var/lib/jenkins/workspace/testproject2/target/*.war  /opt/sanela/server/tomcat/webapps/'
+		//Pusing the artifacts from jenkins workspace to another director//
+		stage ('PUSH ARTIFACT'){
+			steps {
+				sh 'sudo cp /var/lib/jenkins/workspace/labinventory-be/service/target/labinventory.war /opt/sanela/server/tomcat/webapps/'
 				}
 			}
-		
+		//Testing the build files//	
 		stage('UNIT TEST') {
 			steps {
 				sh 'mvn test'
@@ -38,8 +42,6 @@ pipeline {
 		}
 	
 	}
-
-
 }
 
 ````
