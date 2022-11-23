@@ -42,6 +42,36 @@ pipeline {
 		}
 	
 	}
+	environment {
+			EMAIL_TO = 'numbayana@sanelahealth.com,sunnam@sanelahealth.com'
+			BUILD_URL='http://dev.sanelahealth.com:8080/job/async-be'
+			PROJECT_NAME='async-be'
+			
+    		     }
+		post {
+        
+			success {
+				mail body: "Check console output at ${env.BUILD_URL} to view the results."
+                    		to: "${EMAIL_TO}", 
+                    		subject: "Build Success in Jenkins: ${env.PROJECT_NAME}"
+        			}
+        
+			failure {
+				mail body: 'Check console output at $BUILD_URL to view the results. 
+                    		to: "${EMAIL_TO}", 
+                    		subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+        			}
+			unstable {
+				mail body: 'Check console output at $BUILD_URL to view the results. 
+                    		to: "${EMAIL_TO}", 
+                    		subject: 'Unstable build in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+        			}
+			changed {
+				mail body: 'Check console output at $BUILD_URL to view the results.', 
+                    		to: "${EMAIL_TO}", 
+                    		subject: 'Jenkins build is back to normal: $PROJECT_NAME - #$BUILD_NUMBER'
+        			}
+    			}
 }
 
 ````
